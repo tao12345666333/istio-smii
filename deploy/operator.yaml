@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: istio-smii
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: istio-smii
+  template:
+    metadata:
+      labels:
+        name: istio-smii
+    spec:
+      serviceAccountName: istio-smii
+      containers:
+        - name: istio-smii
+          # Replace this with the built image name
+          image: REPLACE_IMAGE
+          command:
+          - istio-smii
+          imagePullPolicy: Always
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "istio-smii"
